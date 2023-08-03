@@ -25,7 +25,7 @@ The Fetch Rewards Data Engineering ETL (Extract, Transform, Load) application is
 
 ### Step 1: Clone the repository
 ```bash
-git clone https://github.com/ShubhamGupta19/Faulty-Sensor-Detection.git
+git clone https://github.com/ShubhamGupta19/ETL-SQS-to-Postgres-Fetch.git
 ```
 
 ### Step 2- Create a conda environment after opening the repository
