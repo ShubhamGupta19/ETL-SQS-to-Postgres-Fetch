@@ -3,8 +3,13 @@ from aws import sqs
 from database import postgres
 from utils import pii_masking
 import config
+
 table_name = 'user_logins'
+
 def setup_logging():
+    """
+    Set up logging configuration to log messages with date and time, and level.
+    """
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s [%(levelname)s]: %(message)s',
@@ -16,7 +21,7 @@ def main():
         setup_logging()
 
         # Step 1: Set Up Docker Environment (Run LocalStack and Postgres containers)
-     
+        # No code for Step 1 in this script. Assumes that Docker environment is already set up.
 
         # Step 2: Read Data from AWS SQS Queue
         logging.info("Reading data from AWS SQS Queue...")
@@ -27,12 +32,13 @@ def main():
         logging.info("Transforming the data...")
         transformed_data = pii_masking.mask_pii_data(data)
 
+        # Step 4: Check if the 'user_logins' table exists in Postgres Database
         if not postgres.check_table_exists(table_name):
+            # If the table does not exist, create it.
+            logging.info("Creating 'user_logins' table in Postgres Database...")
             postgres.create_user_logins_table()
-       
 
-
-        # Step 4: Write to Postgres Database
+        # Step 5: Write to Postgres Database
         logging.info("Writing data to Postgres Database...")
         postgres.write_to_postgres(transformed_data)
 
