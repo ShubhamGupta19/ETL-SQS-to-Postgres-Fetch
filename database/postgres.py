@@ -3,6 +3,15 @@ import config
 
 
 def get_connection():
+    """
+    Get a connection to the PostgreSQL database using the configuration settings.
+
+    Returns:
+        psycopg2.extensions.connection: The PostgreSQL database connection object.
+
+    Raises:
+        Exception: If there is an error while connecting to the database.
+    """
     try:
         connection = psycopg2.connect(
             host=config.DB_HOST,
@@ -17,6 +26,18 @@ def get_connection():
 
 
 def check_table_exists(table_name):
+    """
+    Check if the given table exists in the PostgreSQL database.
+
+    Args:
+        table_name (str): The name of the table to check.
+
+    Returns:
+        bool: True if the table exists, False otherwise.
+
+    Raises:
+        Exception: If there is an error while checking the table existence.
+    """
     try:
         with get_connection() as connection, connection.cursor() as cursor:
             query = f"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = '{table_name}')"
@@ -27,6 +48,12 @@ def check_table_exists(table_name):
 
 
 def create_user_logins_table():
+    """
+    Create the 'user_logins' table in the PostgreSQL database if it does not exist.
+
+    Raises:
+        Exception: If there is an error while creating the table.
+    """
     table_name = 'user_logins'
     if not check_table_exists(table_name):
         try:
@@ -48,8 +75,16 @@ def create_user_logins_table():
 
 
 def write_to_postgres(data):
+    """
+    Write data to the 'user_logins' table in the PostgreSQL database.
+
+    Args:
+        data (list of dict): List of records to insert into the table.
+
+    Raises:
+        Exception: If there is an error while writing to the database.
+    """
     try:
-        
         with get_connection() as connection, connection.cursor() as cursor:
             for record in data:
                 record['create_date'] = record['create_date'].strftime('%Y-%m-%d')
